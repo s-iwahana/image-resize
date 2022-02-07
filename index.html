@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+        <script src="https://cdn.jsdelivr.net/npm/qrcode@latest/build/qrcode.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jsqr@latest/dist/jsQR.min.js"></script>
+
+        <title>Image resize tool</title>
+    </head>
+
+    <body>
+        Image resize tool
+        <HR>
+
+        画像指定
+        <br>
+        <input type="file" id="example" multiple>
+
+        サイズ指定
+        <br>
+        <input name="input1" id="code" type="text" size="10" maxlength ="30">
+        x
+        <input name="input1" id="code" type="text" size="10" maxlength ="30">
+        <br>
+        比率指定
+        <canvas id="canvas" width="215" height="215"></canvas>
+        <br>
+        <div id="preview"></div>
+        <br>
+        <br>
+
+
+    </body>
+
+    <script>
+        var qrcanvas = document.getElementById("canvas")
+
+        function previewFile(file) {
+        // プレビュー画像を追加する要素
+        const preview = document.getElementById('preview');
+
+        // FileReaderオブジェクトを作成
+        const reader = new FileReader();
+
+        // ファイルが読み込まれたときに実行する
+        reader.onload = function (e) {
+            const imageUrl = e.target.result; // 画像のURLはevent.target.resultで呼び出せる
+            const img = document.createElement("img"); // img要素を作成
+            img.src = imageUrl; // 画像のURLをimg要素にセット
+            preview.appendChild(img); // #previewの中に追加
+        }
+
+        // いざファイルを読み込む
+        reader.readAsDataURL(file);
+        }
+
+
+        // <input>でファイルが選択されたときの処理
+        const fileInput = document.getElementById('example');
+        const handleFileSelect = () => {
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                previewFile(files[i]);
+            }
+        }
+        fileInput.addEventListener('change', handleFileSelect);
+    </script>
+</html>
