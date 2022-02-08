@@ -4,9 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
-        <script src="https://cdn.jsdelivr.net/npm/qrcode@latest/build/qrcode.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jsqr@latest/dist/jsQR.min.js"></script>
-
         <title>Image resize tool</title>
     </head>
 
@@ -25,10 +22,15 @@
         <input name="input1" id="code" type="text" size="10" maxlength ="30">
         <br>
         比率指定
+        <br>
+        <br>
+        <input type="submit" value="適用" onclick = "resizeImg()"/></form>
+        <br>
+        プレビュー
+        <br>
         <canvas id="canvas" width="215" height="215"></canvas>
         <br>
         <div id="preview"></div>
-        <br>
         <br>
 
 
@@ -37,25 +39,31 @@
     <script>
         var qrcanvas = document.getElementById("canvas")
 
+        const img;
+        function resizeImg() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 150;
+            canvas.height = 150;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, 150, 150);
+            return canvas.toDataURL('image/png')
+        }
+
         function previewFile(file) {
-        // プレビュー画像を追加する要素
-        const preview = document.getElementById('preview');
-
-        // FileReaderオブジェクトを作成
-        const reader = new FileReader();
-
-        // ファイルが読み込まれたときに実行する
-        reader.onload = function (e) {
-            const imageUrl = e.target.result; // 画像のURLはevent.target.resultで呼び出せる
-            const img = document.createElement("img"); // img要素を作成
-            img.src = imageUrl; // 画像のURLをimg要素にセット
-            preview.appendChild(img); // #previewの中に追加
+            // プレビュー画像を追加する要素
+            const preview = document.getElementById('preview');
+            // FileReaderオブジェクトを作成
+            const reader = new FileReader();
+            // ファイルが読み込まれたときに実行する
+            reader.onload = function (e) {
+                const imageUrl = e.target.result; // 画像のURLはevent.target.resultで呼び出せる
+                img = document.createElement("img"); // img要素を作成
+                img.src = imageUrl; // 画像のURLをimg要素にセット
+                preview.appendChild(img); // #previewの中に追加
+            }
+            // ファイルを読み込む
+            reader.readAsDataURL(file);
         }
-
-        // いざファイルを読み込む
-        reader.readAsDataURL(file);
-        }
-
 
         // <input>でファイルが選択されたときの処理
         const fileInput = document.getElementById('example');
@@ -65,6 +73,8 @@
                 previewFile(files[i]);
             }
         }
+
+
         fileInput.addEventListener('change', handleFileSelect);
     </script>
 </html>
